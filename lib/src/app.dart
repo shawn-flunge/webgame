@@ -12,7 +12,7 @@ class App extends StatelessWidget {
       /// todo: title
       title: 'Flutter Demo',
       theme: ThemeData(
-        fontFamily: 'gulim'
+        fontFamily: 'gulim',
       ),
       home: const HomePage(),
     );
