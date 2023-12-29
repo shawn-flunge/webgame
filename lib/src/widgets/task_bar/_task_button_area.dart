@@ -2,18 +2,10 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:webgame/src/data/objects/program.dart';
 import 'package:webgame/src/design/borders.dart';
-
-class Program{
-
-  final String name;
-  final String icon;
-
-  const Program({
-    required this.name,
-    required this.icon
-  });
-}
+import 'package:webgame/src/states/process_manager.dart';
 
 
 class TaskButtonArea extends StatelessWidget {
@@ -21,13 +13,14 @@ class TaskButtonArea extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<Program> _programs = [
-      const Program(name: '내 컴퓨터', icon: 'assets/icons/ic_mycomputer.png')
-    ];
 
     return Expanded(
-      child: Row(
-        children: List.generate(_programs.length, (index) => _Button(process: _programs[index])),
+      child: Consumer<ProcessManager>(
+        builder: (context, manager, _) {
+          return Row(
+            children: List.generate(manager.length, (index) => _Button(process: manager[index])),
+          );
+        }
       ),
     );
   }
