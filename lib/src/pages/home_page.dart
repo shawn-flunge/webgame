@@ -2,6 +2,8 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:webgame/src/design/colors.dart';
+import 'package:webgame/src/widgets/task_bar/task_bar.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -14,8 +16,15 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-      backgroundColor: Color.fromARGB(255, 14, 110, 110),
-
+      backgroundColor: AppColors.desktopGreen,
+      body: Column(
+        children: [
+          Expanded(
+            child: Text('desktop'),
+          ),
+          TaskBar()
+        ],
+      ),
     );
   }
 }
