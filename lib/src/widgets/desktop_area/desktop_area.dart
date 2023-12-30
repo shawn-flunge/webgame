@@ -2,8 +2,12 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:webgame/src/data/objects/program.dart';
+import 'package:webgame/src/states/process_manager.dart';
+import 'package:webgame/src/states/user_behavior_detector.dart';
 import 'package:webgame/src/widgets/desktop_area/_shortcut.dart';
+import 'package:webgame/src/widgets/desktop_area/_window.dart';
 
 class DesktopArea extends StatelessWidget {
   const DesktopArea({super.key});
@@ -20,19 +24,35 @@ class DesktopArea extends StatelessWidget {
       child: LayoutBuilder(
 
         builder: (context, constraints) {
-          return GestureDetector(
-            child: Stack(
-              fit: StackFit.expand,
-              children: [
-                ...List.generate(_programs.length, (index) {
+          return Consumer2<ProcessManager, UserBehaviorDetector>(
+            builder: (context, manager, detector, child) {
+              return GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTapDown: (details){
+                  detector.doSomething(Behavior.tap);
+                },
+                child: Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    ...List.generate(_programs.length, (index) {
 
-                  return Shortcut(
-                    index: index,
-                    program: _programs[index],
-                  );
-                }),
-              ],
-            ),
+                      return Shortcut(
+                        index: index,
+                        program: _programs[index],
+                      );
+                    }),
+
+                    ...List.generate(manager.length, (index) {
+
+                      return Window(
+                        program: manager[index],
+                        deskTopSize: constraints.biggest,
+                      );
+                    })
+                  ],
+                ),
+              );
+            }
           );
         },
       ),
