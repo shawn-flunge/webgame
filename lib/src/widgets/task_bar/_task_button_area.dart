@@ -63,71 +63,39 @@ class _ButtonState extends State<_Button> {
           _pressed = false;
         });
       },
-      child: Container(
-        decoration: _pressed //|| manager.front?.name == widget.process.name
-            ? negativeBorder.copyWith(color: const Color.fromARGB(255, 214, 214, 214))
-            : positiveBorder,
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5.5),
-        margin: const EdgeInsets.only(right: 1),
-        child: Row(
-          children: [
-            Container(
-              margin: const EdgeInsets.only(right: 4),
-              child: Image.asset(
-                widget.process.icon,
-                width: 20,
-              ),
-            ),
-            Text(
-              widget.process.name,
-              style: TextStyle(
-                  fontFamily: 'gulim',
-                  fontSize: 15,
-                  color: Colors.black,
-                  fontWeight: FontWeight.values[8],
-                  overflow: TextOverflow.fade
-              ),
-            ),
-          ],
+      child: Consumer<ProcessManager>(
+        child: Container(
+          margin: const EdgeInsets.only(right: 4),
+          child: Image.asset(
+            widget.process.icon,
+            width: 20,
+          ),
         ),
+        builder: (context, manager, icon) {
+          return Container(
+            decoration: _pressed || manager.front?.name == widget.process.name
+                ? negativeBorder.copyWith(color: const Color.fromARGB(255, 214, 214, 214))
+                : positiveBorder,
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5.5),
+            margin: const EdgeInsets.only(right: 1),
+            child: Row(
+              children: [
+                icon!,
+                Text(
+                  widget.process.name,
+                  style: TextStyle(
+                      fontFamily: 'gulim',
+                      fontSize: 15,
+                      color: Colors.black,
+                      fontWeight: FontWeight.values[8],
+                      overflow: TextOverflow.fade
+                  ),
+                ),
+              ],
+            ),
+          );
+        }
       ),
-
-      // child: Consumer<ProcessManager>(
-      //     child: widget.process.icon != null
-      //         ? Container(
-      //       margin: const EdgeInsets.only(right: 4),
-      //       child: Image.asset(
-      //         widget.process.icon!,
-      //         width: 20,
-      //       ),
-      //     )
-      //         : null,
-      //     builder: (context, manager, icon) {
-      //       return Container(
-      //         decoration: _pressed || manager.front?.name == widget.process.name
-      //             ? negativeBorder.copyWith(color: const Color.fromARGB(255, 214, 214, 214))
-      //             : positiveBorder,
-      //         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5.5),
-      //         margin: const EdgeInsets.only(right: 1),
-      //         child: Row(
-      //           children: [
-      //             if(widget.process.icon != null)
-      //               icon!,
-      //             Text(
-      //               widget.process.name,
-      //               style: TextStyle(
-      //                   fontFamily: 'gulim',
-      //                   fontSize: 15,
-      //                   color: Colors.black,
-      //                   fontWeight: FontWeight.values[8],
-      //                   overflow: TextOverflow.fade
-      //               ),
-      //             ),
-      //           ],
-      //         ),
-      //       );
-      //     }
-      // ),
     );
   }
 }
