@@ -4,6 +4,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:webgame/src/data/objects/program.dart';
+import 'package:webgame/src/design/decorations/text_tapped.dart';
 import 'package:webgame/src/states/process_manager.dart';
 import 'package:webgame/src/states/user_behavior_detector.dart';
 
@@ -86,8 +87,7 @@ class _ShortcutState extends State<Shortcut> {
                 ),
                 const SizedBox(height: 2,),
                 Container(
-                  color: _tapped ? const Color.fromARGB(125, 6, 0, 111): null,
-                  /// todo: dotted line
+                  decoration: _tapped ? const TextTappedDecoration() : null,
                   child: const Text(
                     '내 컴퓨터',
                     style: TextStyle(
