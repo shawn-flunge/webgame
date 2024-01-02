@@ -10,7 +10,7 @@ void main() {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => ProcessManager(),),
-        Provider(create: (context) => UserBehaviorDetector(),),
+        Provider(create: (context) => UserBehaviorDetector(), dispose: (context, detector) => detector.dispose()),
       ],
       child: const App(),
     )

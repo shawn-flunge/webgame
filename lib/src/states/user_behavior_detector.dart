@@ -18,4 +18,7 @@ class UserBehaviorDetector {
     _streamController.sink.add(behavior);
   }
 
+  dispose(){
+    _streamController.close();
+  }
 }
