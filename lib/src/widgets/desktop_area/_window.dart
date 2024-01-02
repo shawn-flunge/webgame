@@ -46,21 +46,6 @@ class _WindowState extends State<Window> {
   void resizeHandler(PointerHoverEvent event){
     _resizeMode = true;
 
-    // if(event.localPosition.dx<3 || event.localPosition.dx>_size.width-3){
-    //   setState(() {
-    //     _cursor = SystemMouseCursors.resizeLeftRight;
-    //   });
-    //
-    // } else if(event.localPosition.dy <3 || event.localPosition.dy>_size.height-3){
-    //   setState(() {
-    //     _cursor = SystemMouseCursors.resizeUpDown;
-    //   });
-    // } else {
-    //   _resizeMode = false;
-    //   setState(() {
-    //     _cursor = SystemMouseCursors.basic;
-    //   });
-    // }
     if(event.localPosition.dx<5){
       _left = true;
 
@@ -69,7 +54,6 @@ class _WindowState extends State<Window> {
       });
     } else if(event.localPosition.dx>_size.width-5){
       _right=true;
-      // print('right');
       setState(() {
         _cursor = SystemMouseCursors.resizeLeftRight;
       });
@@ -103,15 +87,38 @@ class _WindowState extends State<Window> {
 
   void resizeWindow(DragUpdateDetails details){
     if(!_resizeMode) return;
-    // if(_size.width < 240) {
-    //   print('small $_size');
-    //   return;
-    // }
-    // print('${details.localPosition}, ${details.localPosition-Offset(_size.width, _size.height)}');
-    setState(() {
-      // math.abs()
-      _size += details.localPosition-Offset(_size.width, _size.height);
-    });
+
+    if(_right){
+      final diff = details.localPosition-Offset(_size.width, _size.height);
+      final double width = (_size.width+diff.dx).clamp(240.0, widget.deskTopSize.width);
+      setState(() {
+        // _size = Size(_size.width+diff.dx, _size.height);
+        _size = Size(width, _size.height);
+      });
+    } else if(_bottom){
+      final diff = details.localPosition-Offset(_size.width, _size.height);
+      final double height = (_size.height+diff.dy).clamp(150.0, widget.deskTopSize.height);
+
+      setState(() {
+        _size = Size(_size.width, height);
+      });
+    } else if(_left){
+      final double width = (_size.width+_position.dx-details.globalPosition.dx).clamp(240.0, widget.deskTopSize.width);
+      setState(() {
+        if(width!=240.0){
+          _position = Offset(details.globalPosition.dx, _position.dy);
+          _size = Size(width, _size.height);
+        }
+      });
+    } else if(_top) {
+      final double height = (_size.height+_position.dy-details.globalPosition.dy).clamp(150.0, widget.deskTopSize.height);
+      setState(() {
+        if(height!=150.0){
+          _size = Size(_size.width, height);
+          _position = Offset(_position.dx, details.globalPosition.dy);
+        }
+      });
+    }
   }
 
   @override
