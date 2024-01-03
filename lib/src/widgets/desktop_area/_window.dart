@@ -223,7 +223,7 @@ class _WindowState extends State<Window> {
                         type: DefaultType.minimum,
                         onClick: (){
                           final manager = context.read<ProcessManager>();
-                          manager.hide(widget.program.name);
+                          manager.hide(widget.program);
 
                           /// todo : 창 아래로 내리는거
                         },

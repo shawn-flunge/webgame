@@ -9,8 +9,8 @@ void main(){
   group('Process Manager Test', () {
     final manager = ProcessManager();
 
-    const program1 = Program(name: 'p1', icon: 'path');
-    const program2 = Program(name: 'p2', icon: 'path');
+    final program1 = Program(name: 'p1', icon: 'path');
+    final program2 = Program(name: 'p2', icon: 'path');
 
     test('a new added program should be the value "front"', () {
 

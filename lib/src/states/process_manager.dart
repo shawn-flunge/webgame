@@ -25,8 +25,16 @@ class ProcessManager extends ChangeNotifier{
     notifyListeners();
   }
 
-  void hide(String name){
+  void hide(Program program){
     front = null;
+    final has = programs.indexWhere((element) => element.name == program.name);
+
+    if(has != -1){
+      front = programs[has];
+    } else {
+      programs.add(program);
+      front = program;
+    }
     notifyListeners();
   }
 

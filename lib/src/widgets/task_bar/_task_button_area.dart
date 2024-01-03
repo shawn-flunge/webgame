@@ -62,6 +62,8 @@ class _ButtonState extends State<_Button> {
         setState(() {
           _pressed = false;
         });
+        final manager = context.read<ProcessManager>();
+        manager.run(widget.process);
       },
       child: Consumer<ProcessManager>(
         child: Container(

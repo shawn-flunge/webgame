@@ -13,7 +13,7 @@ class DesktopArea extends StatelessWidget {
   const DesktopArea({super.key});
 
   /// todo : 프로그램 목록 불러오는 방법
-  static const List<Program> _programs = [
+  static List<Program> _programs = [
     Program(name: '내 컴퓨터', icon: 'assets/icons/ic_mycomputer.png'),
   ];
 
