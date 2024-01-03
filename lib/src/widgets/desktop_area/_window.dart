@@ -225,16 +225,25 @@ class _WindowState extends State<Window> {
                           final manager = context.read<ProcessManager>();
                           manager.hide(widget.program.name);
 
+                          /// todo : 창 아래로 내리는거
                         },
                       ),
                       WindowsThemeButton(
                         type: DefaultType.maximum,
                         onClick: (){
-
-                          setState(() {
-                            _size = widget.deskTopSize;
-                            _position = Offset.zero;
-                          });
+                          if(_isFullSize){
+                            setState(() {
+                              _position = const Offset(50, 50);
+                              _size = _beforeFull;
+                            });
+                          } else{
+                            _beforeFull = _size;
+                            setState(() {
+                              _size = widget.deskTopSize;
+                              _position = Offset.zero;
+                            });
+                          }
+                          _isFullSize = !_isFullSize;
                         },
                       ),
                       WindowsThemeButton(
