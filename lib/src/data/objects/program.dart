@@ -3,11 +3,11 @@ class Program{
 
   final String name;
   final String icon;
-  bool hide;
+  bool visible;
 
   Program({
     required this.name,
     required this.icon,
-    this.hide = false
+    this.visible = true
   });
 }
