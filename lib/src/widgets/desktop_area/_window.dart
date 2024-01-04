@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
 import 'package:webgame/src/data/objects/program.dart';
+import 'package:webgame/src/design/borders.dart';
 import 'package:webgame/src/states/process_manager.dart';
 import 'package:webgame/src/widgets/window_theme_button.dart';
 
@@ -123,68 +124,93 @@ class _WindowState extends State<Window> {
 
   @override
   Widget build(BuildContext context) {
-    return Positioned(
-      left: _position.dx,
-      top: _position.dy,
-      child: MouseRegion(
-        cursor: _cursor,
-        onHover: resizeHandler,
-        child: GestureDetector(
-          // onTapDown: (details){
-          //   if(!_resizeMode) return;
-          //   print(details.localPosition);
-          // },
-          onPanUpdate: resizeWindow,
-          child: Container(
-            width: _size.width,
-            height: _size.height,
-            decoration: const BoxDecoration(
-                color: Color.fromARGB(255, 179, 179, 179),
-                border: Border(
-                  top: BorderSide(
-                      color: Colors.white,
-                      width: 2
-                  ),
-                  left: BorderSide(
-                    color: Colors.white,
-                    width: 2,
-                  ),
-                  bottom: BorderSide(
-                    color: Colors.black,
-                    width: 2,
-                  ),
-                  right: BorderSide(
-                    color: Colors.black,
-                    width: 2,
-                  ),
-                )
-            ),
-            child: Column(
-              children: [
-
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 2),
-                  margin: const EdgeInsets.all(2),
-                  color: const Color.fromARGB(255, 0, 0, 109),
-                  child: Row(
-                    children: [
-
-                      Expanded(
-                        child: GestureDetector(
-                          behavior: HitTestBehavior.translucent,
-                          onPanStart: (details){
-                            _last = details.localPosition;
+    final manager = context.watch<ProcessManager>();
+    return Visibility(
+      visible: manager.visible(widget.program),
+      child: Positioned(
+        left: _position.dx,
+        top: _position.dy,
+        child: MouseRegion(
+          cursor: _cursor,
+          onHover: resizeHandler,
+          child: GestureDetector(
+            onPanUpdate: resizeWindow,
+            child: Container(
+              width: _size.width,
+              height: _size.height,
+              decoration: positiveBorder,
+              child: Column(
+                children: [
+      
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 2),
+                    margin: const EdgeInsets.all(2),
+                    color: const Color.fromARGB(255, 0, 0, 109),
+                    child: Row(
+                      children: [
+      
+                        Expanded(
+                          child: GestureDetector(
+                            behavior: HitTestBehavior.translucent,
+                            onPanStart: (details){
+                              _last = details.localPosition;
+                            },
+                            onPanUpdate: (details){
+                              // print(details.localPosition);
+                              if(_last == null) return;
+      
+                              setState(() {
+                                _position += details.localPosition-_last!;
+                              });
+                              _last = details.localPosition;
+                            },
+                            onDoubleTap: (){
+                              if(_isFullSize){
+                                setState(() {
+                                  _position = const Offset(50, 50);
+                                  _size = _beforeFull;
+                                });
+                              } else{
+                                _beforeFull = _size;
+                                setState(() {
+                                  _size = widget.deskTopSize;
+                                  _position = Offset.zero;
+                                });
+                              }
+                              _isFullSize = !_isFullSize;
+                            },
+                            child: Row(
+                              children: [
+                                Image.asset(
+                                  widget.program.icon,
+                                  width: 20,
+                                  height: 20,
+                                ),
+                                const SizedBox(width: 4,),
+                                Text(
+                                  widget.program.name,
+                                  style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 15
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+      
+                        WindowsThemeButton(
+                          type: DefaultType.minimum,
+                          onClick: (){
+                            final manager = context.read<ProcessManager>();
+                            manager.hide(widget.program);
+      
+                            /// todo : 창 아래로 내리는거
                           },
-                          onPanUpdate: (details){
-                            // print(details.localPosition);
-                            if(_last == null) return;
-
-                            setState(() {
-                              _position += details.localPosition-_last!;
-                            });
-                            _last = details.localPosition;
-                          },
-                          onDoubleTap: (){
+                        ),
+                        WindowsThemeButton(
+                          type: DefaultType.maximum,
+                          onClick: (){
                             if(_isFullSize){
                               setState(() {
                                 _position = const Offset(50, 50);
@@ -199,67 +225,22 @@ class _WindowState extends State<Window> {
                             }
                             _isFullSize = !_isFullSize;
                           },
-                          child: Row(
-                            children: [
-                              Image.asset(
-                                widget.program.icon,
-                                width: 20,
-                                height: 20,
-                              ),
-                              const SizedBox(width: 4,),
-                              Text(
-                                widget.program.name,
-                                style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 15
-                                ),
-                              ),
-                            ],
-                          ),
                         ),
-                      ),
-
-                      WindowsThemeButton(
-                        type: DefaultType.minimum,
-                        onClick: (){
-                          final manager = context.read<ProcessManager>();
-                          manager.hide(widget.program);
-
-                          /// todo : 창 아래로 내리는거
-                        },
-                      ),
-                      WindowsThemeButton(
-                        type: DefaultType.maximum,
-                        onClick: (){
-                          if(_isFullSize){
-                            setState(() {
-                              _position = const Offset(50, 50);
-                              _size = _beforeFull;
-                            });
-                          } else{
-                            _beforeFull = _size;
-                            setState(() {
-                              _size = widget.deskTopSize;
-                              _position = Offset.zero;
-                            });
-                          }
-                          _isFullSize = !_isFullSize;
-                        },
-                      ),
-                      WindowsThemeButton(
-                        type: DefaultType.close,
-                        onClick: (){
-                          final manager = context.read<ProcessManager>();
-                          manager.close(widget.program.name);
-
-                        },
-                      ),
-
-                    ],
+                        WindowsThemeButton(
+                          type: DefaultType.close,
+                          onClick: (){
+                            final manager = context.read<ProcessManager>();
+                            manager.close(widget.program.name);
+      
+                          },
+                        ),
+      
+                      ],
+                    ),
                   ),
-                ),
-
-              ],
+      
+                ],
+              ),
             ),
           ),
         ),
