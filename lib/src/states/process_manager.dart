@@ -16,6 +16,7 @@ class ProcessManager extends ChangeNotifier{
     final has = programs.indexWhere((element) => element.name == program.name);
 
     if(has != -1){
+      programs[has].visible = true;
       front = programs[has];
 
     } else {
@@ -30,12 +31,9 @@ class ProcessManager extends ChangeNotifier{
     final has = programs.indexWhere((element) => element.name == program.name);
 
     if(has != -1){
-      front = programs[has];
-    } else {
-      programs.add(program);
-      front = program;
+      programs[has].visible = false;
+      notifyListeners();
     }
-    notifyListeners();
   }
 
   void close(String name){
@@ -52,8 +50,16 @@ class ProcessManager extends ChangeNotifier{
     notifyListeners();
   }
 
+  bool visible(Program program){
+    final index = programs.indexWhere((element) => element.name == program.name);
+    if(index == -1){
+      return false;
+    } else {
+      return programs[index].visible;
+    }
+  }
 
-  operator [](int i) => programs[i];
+  Program operator [](int i) => programs[i];
   int get length => programs.length;
 
 }
