@@ -7,8 +7,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:webgame/src/data/objects/program.dart';
 import 'package:webgame/src/design/borders.dart';
+import 'package:webgame/src/games/example_game.dart';
 import 'package:webgame/src/states/process_manager.dart';
 import 'package:webgame/src/widgets/window_theme_button.dart';
+
+const game = ExampleGame();
 
 class Window extends StatefulWidget {
   final Program program;
@@ -134,6 +137,7 @@ class _WindowState extends State<Window> {
           cursor: _cursor,
           onHover: resizeHandler,
           child: GestureDetector(
+            behavior: HitTestBehavior.deferToChild,
             onPanUpdate: resizeWindow,
             child: Container(
               width: _size.width,
@@ -238,6 +242,8 @@ class _WindowState extends State<Window> {
                       ],
                     ),
                   ),
+
+                  game
       
                 ],
               ),
